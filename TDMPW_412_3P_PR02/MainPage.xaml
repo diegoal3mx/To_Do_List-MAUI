@@ -1,7 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="TDMPW_412_3P_PR02.MainPage">
+    
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:BoolToObjectConverter x:Key="BoolToObjectConverter" TrueObject="Completada" FalseObject="No completada" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <toolkit:BoolToObjectConverter x:Key="btnBoolToObjectConverter" TrueObject="No completada" FalseObject="Completada" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <ScrollView>
         <VerticalStackLayout
@@ -27,27 +38,45 @@
 
 
             <ListView ItemsSource="{Binding Tasks}" ItemSelected="OnItemSelected" HeightRequest="200">
+                <ListView.Header>
+                    <StackLayout BackgroundColor="LightGray">
+                        <Label Margin="10,0,0,0"
+                   Text="Tareas"
+                   FontSize="12"
+                   FontAttributes="Bold" />
+                    </StackLayout>
+                </ListView.Header>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid Padding="10">
+                            <Grid Padding="10"  ColumnSpacing="10">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="30" />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <Label  Grid.RowSpan="2" Text="{Binding Id, Mode=TwoWay}" WidthRequest="50" />
+                                <Label  Grid.RowSpan="2" Text="{Binding Id, Mode=TwoWay}" WidthRequest="40" />
                                 <Label Grid.Column="1"
-                           Text="{Binding Description, Mode=TwoWay}"
+                           Text="{Binding Description, Mode=TwoWay}" 
                            FontAttributes="Bold"  />
                                 <Label Grid.Row="1"
                            Grid.Column="1"
-                           Text="{Binding Status, Mode=TwoWay}"
+                           Text="{Binding Status, Mode=TwoWay, Converter={StaticResource BoolToObjectConverter}}"
                            FontAttributes="Italic"
-                           VerticalOptions="End" />
+                           VerticalOptions="Center" />
+                                <Button x:Name="btnChangeStatus" Grid.Row="1" Margin="50,0,80,0"
+                           Grid.Column="2"
+                           Text="{Binding Status,Mode=TwoWay, StringFormat='Marcar como {0}', Converter={StaticResource btnBoolToObjectConverter}}"
+                           MinimumHeightRequest="40"
+                           FontAttributes="Italic"
+                           VerticalOptions="Center" 
+                           Clicked="btnChangeStatus_Clicked"        
+                          />
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

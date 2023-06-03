@@ -9,13 +9,13 @@ namespace TDMPW_412_3P_PR02
 {
     public class Task : INotifyPropertyChanged
     {
-        public int id;
-        public string description;
-        public bool status;
+        private int id;
+        private string description;
+        private bool status;
 
-        public int Id { get=>id; set { RaisePropertyChanged(nameof(Id)); }}
-        public string Description { get=>description; set { RaisePropertyChanged(nameof(Description)); } }
-        public bool Status { get=>status; set { RaisePropertyChanged(nameof(Status)); } }
+        public int Id { get=>id; set { id = value; RaisePropertyChanged(nameof(Id)); }}
+        public string Description { get=>description; set { description = value; RaisePropertyChanged(nameof(Description)); } }
+        public bool Status { get=>status; set { status = value;  RaisePropertyChanged(nameof(Status)); } }
 
         public Task(int id, string description, bool status)
         {

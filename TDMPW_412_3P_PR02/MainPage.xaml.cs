@@ -50,5 +50,15 @@ public partial class MainPage : ContentPage
        
      
     }
+
+    private void btnChangeStatus_Clicked(System.Object sender, System.EventArgs e)
+    {
+      
+        var btn = sender as Button;
+        Task taskToSearch = btn.Parent.BindingContext as Task;
+        var taskToModify = allTasks.Tasks.Where(taskToModify => taskToModify.Id == taskToSearch.Id);
+        
+        taskToModify.ElementAt(0).Status = !taskToModify.ElementAt(0).Status;
+    }
 }
 
