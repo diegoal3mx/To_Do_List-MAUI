@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TDMPW_412_3P_PR02.MainPage">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Spacing="25"
+            Padding="30,0"
+            VerticalOptions="Center">
+
+            <Label
+                Text="Tareas"
+                SemanticProperties.HeadingLevel="Level1"
+                FontSize="32"
+                HorizontalOptions="Center" />
+
+            <Entry x:Name="txtNuevaTarea"
+                  Placeholder="Añadir tarea"
+                  PlaceholderColor="#cfd0d4"
+                  WidthRequest="200"
+                HorizontalOptions="Center"
+                 />
+
+            <Button Text="Agregar Tarea"/>
+            <Button Text="Eliminar Tarea"/>
+         
+
+            <ListView ItemsSource="{Binding tasks}" HeightRequest="200">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Padding="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Label  Grid.RowSpan="2" Text="{Binding id}" WidthRequest="50" />
+                                <Label Grid.Column="1"
+                           Text="{Binding description}"
+                           FontAttributes="Bold"  />
+                                <Label Grid.Row="1"
+                           Grid.Column="1"
+                           Text="{Binding status}"
+                           FontAttributes="Italic"
+                           VerticalOptions="End" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
