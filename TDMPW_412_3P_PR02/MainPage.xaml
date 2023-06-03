@@ -22,11 +22,11 @@
                 HorizontalOptions="Center"
                  />
 
-            <Button Text="Agregar Tarea"/>
+            <Button x:Name="btnAdd" Text="Agregar Tarea" Clicked="btnAdd_Clicked"/>
             <Button Text="Eliminar Tarea"/>
-         
 
-            <ListView ItemsSource="{Binding tasks}" HeightRequest="200">
+
+            <ListView ItemsSource="{Binding Tasks}" HeightRequest="200">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -39,13 +39,13 @@
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <Label  Grid.RowSpan="2" Text="{Binding id}" WidthRequest="50" />
+                                <Label  Grid.RowSpan="2" Text="{Binding Id, Mode=TwoWay}" WidthRequest="50" />
                                 <Label Grid.Column="1"
-                           Text="{Binding description}"
+                           Text="{Binding Description, Mode=TwoWay}"
                            FontAttributes="Bold"  />
                                 <Label Grid.Row="1"
                            Grid.Column="1"
-                           Text="{Binding status}"
+                           Text="{Binding Status, Mode=TwoWay}"
                            FontAttributes="Italic"
                            VerticalOptions="End" />
                             </Grid>
