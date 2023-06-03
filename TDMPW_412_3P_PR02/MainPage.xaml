@@ -23,10 +23,10 @@
                  />
 
             <Button x:Name="btnAdd" Text="Agregar Tarea" Clicked="btnAdd_Clicked"/>
-            <Button Text="Eliminar Tarea"/>
+            <Button x:Name="btnDelete" Text="Eliminar Tarea" Clicked="btnDelete_Clicked"/>
 
 
-            <ListView ItemsSource="{Binding Tasks}" HeightRequest="200">
+            <ListView ItemsSource="{Binding Tasks}" ItemSelected="OnItemSelected" HeightRequest="200">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
