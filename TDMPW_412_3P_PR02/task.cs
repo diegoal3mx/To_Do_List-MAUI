@@ -11,17 +11,17 @@ namespace TDMPW_412_3P_PR02
     {
         private int id;
         private string description;
-        private bool status;
+        private bool completed;
 
         public int Id { get=>id; set { id = value; RaisePropertyChanged(nameof(Id)); }}
         public string Description { get=>description; set { description = value; RaisePropertyChanged(nameof(Description)); } }
-        public bool Status { get=>status; set { status = value;  RaisePropertyChanged(nameof(Status)); } }
+        public bool Completed { get=>completed; set { completed = value;  RaisePropertyChanged(nameof(Completed)); } }
 
-        public Task(int id, string description, bool status)
+        public Task(int id, string description, bool completed)
         {
             this.id = id;
-            this.description= description;
-            this.status = status;
+            this.description = description;
+            this.completed = completed;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -3,86 +3,114 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="TDMPW_412_3P_PR02.MainPage">
-    
 
     <ContentPage.Resources>
         <ResourceDictionary>
             <toolkit:BoolToObjectConverter x:Key="BoolToObjectConverter" TrueObject="Completada" FalseObject="No completada" />
-        </ResourceDictionary>
-        <ResourceDictionary>
-            <toolkit:BoolToObjectConverter x:Key="btnBoolToObjectConverter" TrueObject="No completada" FalseObject="Completada" />
+            <toolkit:BoolToObjectConverter x:Key="StrikethroughBoolToObjectConverter" TrueObject="{x:Static TextDecorations.Strikethrough}" FalseObject="{x:Static TextDecorations.None}" />
+           
+                <toolkit:MultiConverter x:Key="MyMultiConverter">
+                    <toolkit:IntToBoolConverter />
+                    <toolkit:InvertedBoolConverter />
+                </toolkit:MultiConverter>
+                    
+               
+    
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <ScrollView>
+        <ScrollView.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Offset="0.0" Color="#4ecdc4"></GradientStop>
+                <GradientStop Offset="1" Color="#556270"></GradientStop>
+            </LinearGradientBrush>
+        </ScrollView.Background>
         <VerticalStackLayout
             Spacing="25"
             Padding="30,0"
-            VerticalOptions="Center">
+            VerticalOptions="Start"
+            HorizontalOptions="Center">
 
-            <Label
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Margin="0,50,0,0">
+
+                <Image x:Name="imgTask"
+                   HeightRequest="100"
+                   Source="task.png"
+                   HorizontalOptions="Center"
+                   />
+               
+                <Label
                 Text="Tareas"
                 SemanticProperties.HeadingLevel="Level1"
                 FontSize="32"
-                HorizontalOptions="Center" />
+                FontFamily="JustDoIt"
+                HorizontalOptions="Center" 
+                HeightRequest="100"/>
 
-            <Entry x:Name="txtNuevaTarea"
-                  Placeholder="Añadir tarea"
+                
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand">
+                <Entry x:Name="txtNewTask"
+                  Placeholder="Nueva tarea"
                   PlaceholderColor="#cfd0d4"
-                  WidthRequest="200"
+                  WidthRequest="400"
                 HorizontalOptions="Center"
                  />
 
-            <Button x:Name="btnAdd" Text="Agregar Tarea" Clicked="btnAdd_Clicked"/>
-            <Button x:Name="btnDelete" Text="Eliminar Tarea" Clicked="btnDelete_Clicked"/>
+                <Button x:Name="btnAdd" Text="Agregar Tarea" Clicked="btnAdd_Clicked"/>
+
+            </HorizontalStackLayout>
 
 
-            <ListView ItemsSource="{Binding Tasks}" ItemSelected="OnItemSelected" HeightRequest="200">
+            <ListView ItemsSource="{Binding Tasks}" >
                 <ListView.Header>
-                    <StackLayout BackgroundColor="LightGray">
-                        <Label Margin="10,0,0,0"
-                   Text="Tareas"
-                   FontSize="12"
+                    <StackLayout BackgroundColor="DarkGray">
+                        <Label x:Name="lblDate" Margin="10,0,0,0"
+                   Text="{Binding FormattedLocalDate, StringFormat='Tareas de hoy {0}'}"
+                   FontSize="15"
+                   HeightRequest="30"
                    FontAttributes="Bold" />
                     </StackLayout>
                 </ListView.Header>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid Padding="10"  ColumnSpacing="10">
+                            <Grid Padding="10"  ColumnSpacing="5">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="30" />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="50*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <Label  Grid.RowSpan="2" Text="{Binding Id, Mode=TwoWay}" WidthRequest="40" />
-                                <Label Grid.Column="1"
-                           Text="{Binding Description, Mode=TwoWay}" 
-                           FontAttributes="Bold"  />
+                                <CheckBox x:Name="chkChangeStatus" Grid.Row="0"  CheckedChanged="chkChangeStatus_CheckedChanged" Margin="0,-10,0,0"/>
+                                <Label  Grid.RowSpan="2" Grid.Column="1" Text="{Binding Id, Mode=TwoWay}" WidthRequest="40" VerticalOptions="Start"/>
+                                <Label Grid.Column="2"
+                                       Text="{Binding Description, Mode=TwoWay}" 
+                                       TextDecorations="{Binding Completed, Converter={StaticResource StrikethroughBoolToObjectConverter}}"
+                                       FontAttributes="Bold" 
+                                       VerticalOptions="Start"
+                                       />
                                 <Label Grid.Row="1"
-                           Grid.Column="1"
-                           Text="{Binding Status, Mode=TwoWay, Converter={StaticResource BoolToObjectConverter}}"
-                           FontAttributes="Italic"
-                           VerticalOptions="Center" />
-                                <Button x:Name="btnChangeStatus" Grid.Row="1" Margin="50,0,80,0"
-                           Grid.Column="2"
-                           Text="{Binding Status,Mode=TwoWay, StringFormat='Marcar como {0}', Converter={StaticResource btnBoolToObjectConverter}}"
-                           MinimumHeightRequest="40"
-                           FontAttributes="Italic"
-                           VerticalOptions="Center" 
-                           Clicked="btnChangeStatus_Clicked"        
-                          />
+                                        Grid.Column="2"
+                                        Text="{Binding Completed, Mode=TwoWay, Converter={StaticResource BoolToObjectConverter}}"
+                                        FontAttributes="Italic"
+                                        VerticalOptions="Start"
+                                        Margin="0,-18,0,0"/>
+
+                                <Button x:Name="btnDelete" Grid.Row="0" VerticalOptions="End" HeightRequest="35" MinimumHeightRequest="10" Margin="0,5,0,0"
+                                        Grid.Column="3" Text="Eliminar" Clicked="btnDelete_Clicked"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
+            <Label x:Name="lblNoTasks" Text="¡Hurra! No hay tareas" FontSize="30" HorizontalOptions="Center" IsVisible="{Binding NumberOfTasks, Converter={StaticResource MyMultiConverter}}"/>
 
         </VerticalStackLayout>
     </ScrollView>

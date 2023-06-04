@@ -1,64 +1,60 @@
-﻿namespace TDMPW_412_3P_PR02;
+﻿using System.ComponentModel;
 
-public partial class MainPage : ContentPage
+namespace TDMPW_412_3P_PR02;
+
+public partial class MainPage : ContentPage, INotifyPropertyChanged
 {
 
     TasksViewModel allTasks = new TasksViewModel();
-    int numberOfTasks;
-    Task taskToDelete;
+    private int numberOfTasks;
+    public int NumberOfTasks { get => numberOfTasks; set { numberOfTasks = value; OnPropertyChanged(); } }
+    DateOnly localDate;
+
+    private string formattedLocalDate;
+    public string FormattedLocalDate { get => formattedLocalDate; set { formattedLocalDate = value; } }
+
 
     public MainPage()
 	{
 		InitializeComponent();
-        numberOfTasks = allTasks.Tasks.Count;
+        NumberOfTasks = allTasks.Tasks.Count;
         BindingContext = allTasks;
+        localDate = DateOnly.FromDateTime(DateTime.Now);
+        formattedLocalDate = localDate.ToLongDateString();
+        lblDate.BindingContext = this;
+        lblNoTasks.BindingContext = this;
     }
 
-    void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
+    private void btnAdd_Clicked(System.Object sender, System.EventArgs e)
     {
-        Task item = args.SelectedItem as Task;
-
-        if (item != null)
-        {
-            taskToDelete = item;
-        }
-        else { 
-            taskToDelete = null;
-        }
-
-    }
-
-    private async void btnAdd_Clicked(System.Object sender, System.EventArgs e)
-    {
-       numberOfTasks++;
-       Task newTask = new Task(numberOfTasks,txtNuevaTarea.Text,false);
+       NumberOfTasks++;
+       Task newTask = new Task(numberOfTasks,txtNewTask.Text,false);
        allTasks.Tasks.Add(newTask);
 
-        await DisplayAlert("Tarea agregada con éxito","", "Aceptar");
     }
 
-    private async void btnDelete_Clicked(System.Object sender, System.EventArgs e)
+    private void btnDelete_Clicked(System.Object sender, System.EventArgs e)
     {
-        if (taskToDelete != null)
-        {
-            allTasks.Tasks.Remove(taskToDelete);
-            await DisplayAlert("Tarea eliminada con éxito", "", "Aceptar");
-        }
-        else {
-            await DisplayAlert("Selecciona una tarea para eliminar", "", "Aceptar");
-        }
-       
+
+        var btn = sender as Button;
+        Task taskToSearch = btn.Parent.BindingContext as Task;
+        var taskToDelete = allTasks.Tasks.Where(taskToDelete => taskToDelete.Id == taskToSearch.Id);
+
+            allTasks.Tasks.Remove(taskToDelete.ElementAt(0));
+
+         if (allTasks.Tasks.Count == 0) {
+            NumberOfTasks = 0;
+            }  
      
     }
 
-    private void btnChangeStatus_Clicked(System.Object sender, System.EventArgs e)
+    private void chkChangeStatus_CheckedChanged(System.Object sender, Microsoft.Maui.Controls.CheckedChangedEventArgs e)
     {
-      
-        var btn = sender as Button;
+        var btn = sender as CheckBox;
         Task taskToSearch = btn.Parent.BindingContext as Task;
         var taskToModify = allTasks.Tasks.Where(taskToModify => taskToModify.Id == taskToSearch.Id);
-        
-        taskToModify.ElementAt(0).Status = !taskToModify.ElementAt(0).Status;
+
+        taskToModify.ElementAt(0).Completed = !taskToModify.ElementAt(0).Completed;
     }
 }
 
